@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1145
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WildRiftAssetRebuilder", "WildRiftAssetRebuilder\WildRiftAssetRebuilder.csproj", "{9C5DF1B5-BD52-4123-BFC2-1FFE00EF6F33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C5DF1B5-BD52-4123-BFC2-1FFE00EF6F33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C5DF1B5-BD52-4123-BFC2-1FFE00EF6F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C5DF1B5-BD52-4123-BFC2-1FFE00EF6F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C5DF1B5-BD52-4123-BFC2-1FFE00EF6F33}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {89681F84-DA95-4434-8D75-F8AEA4DDF3D6}
+	EndGlobalSection
+EndGlobal
