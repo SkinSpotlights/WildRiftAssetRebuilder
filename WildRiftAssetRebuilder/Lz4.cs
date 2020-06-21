@@ -11,8 +11,11 @@ namespace WildRiftAssetRebuilder
 {
     public class Lz4 : Stream
     {
-        public Lz4(Stream input, long inputLength = long.MaxValue)
+        public Lz4(Stream input, long inputLength = long.MaxValue, int decodeSize = 0x20000)
         {
+            DecBufLen = decodeSize;
+            DecBufMask = decodeSize - 1;
+            decodeBuffer = new byte[DecBufLen + InBufLen];
             Reset(input, inputLength);
         }
 
@@ -69,12 +72,12 @@ namespace WildRiftAssetRebuilder
         //we use a circular buffer for this - every time we write into this
         //buffer, we also write the same into our output buffer
 
-        private const int DecBufLen = 0x20000;
-        private const int DecBufMask = 0x1FFFF;
+        private int DecBufLen;
+        private int DecBufMask;
 
         private const int InBufLen = 128;
 
-        private byte[] decodeBuffer = new byte[DecBufLen + InBufLen];
+        private byte[] decodeBuffer;
         private int decodeBufferPos;
         public int inBufPos;
         public int inBufEnd;

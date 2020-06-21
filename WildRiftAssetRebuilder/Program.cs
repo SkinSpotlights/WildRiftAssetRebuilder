@@ -63,17 +63,17 @@ namespace WildRiftAssetRebuilder
             //List of blocks we are recreating
             List<int> compressedList = new List<int>();
             List<int> decompressedList = new List<int>();
-
+            int decodedSize = 0x20000;
             var compressedStream = new MemoryStream(ToRebuild);
             using (var lz4Stream = new Lz4(compressedStream))
             {
                 lz4Stream.input.Position = offset;
                 while (offset != ToRebuild.Length)
                 {
-                    Byte[] decodedBytes = new byte[0x20000];
+                    Byte[] decodedBytes = new byte[decodedSize];
                     //Read the bytes til we hit 0x20000
                     //Unity max decompressed size for a chunk is 0x20000
-                    int decompressedSize = lz4Stream.Read(decodedBytes, 0, 0x20000);
+                    int decompressedSize = lz4Stream.Read(decodedBytes, 0, decodedSize);
 
                     if (lz4Stream.input.Position != ToRebuild.Length)
                     {
@@ -87,9 +87,9 @@ namespace WildRiftAssetRebuilder
                     //Unsure if a failed decode = rest of file is not encoded.
                     //In most of my checks it seems to be the case
                     bool decodeFailed =  lz4Stream.phase == Lz4.DecodePhase.CopyLiteral && lz4Stream.litLen != 0
-                                         || lz4Stream.phase == Lz4.DecodePhase.CopyMatch && lz4Stream.matLen != 0
-                                         || lz4Stream.phase != Lz4.DecodePhase.CopyLiteral
-                                         && lz4Stream.phase != Lz4.DecodePhase.CopyMatch;
+                                         //|| lz4Stream.phase == Lz4.DecodePhase.CopyMatch && lz4Stream.matLen != 0
+                                         || lz4Stream.phase != Lz4.DecodePhase.CopyLiteral;
+                                         //&& lz4Stream.phase != Lz4.DecodePhase.CopyMatch;
 
                     bool loop = true;
                     //Comment out the while to make it check every chunk
@@ -97,7 +97,7 @@ namespace WildRiftAssetRebuilder
                     {
                         if (decodeFailed)
                         {
-                            int size = 0x20000;
+                            int size = decodedSize;
                             if (offset + size > ToRebuild.Length)
                                 size = ToRebuild.Length - offset;
                             decompressedSize = size;
@@ -108,8 +108,13 @@ namespace WildRiftAssetRebuilder
                         if (decodedBytes.Length != decompressedSize)
                             decodedBytes = decodedBytes.Resize(decompressedSize);
 
+
                         if (compressedSize == decompressedSize)
+                        {
+                            //Allocate a new array otherwise we overwrite the others in the list
+                            decodedBytes = new byte[decompressedSize];
                             Buffer.BlockCopy(ToRebuild, offset, decodedBytes, 0, decodedBytes.Length);
+                        }
 
                         decodedBytesList.Add(decodedBytes);
                         //Store Compressed/Decompressed Data so we can remake
